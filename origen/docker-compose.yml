@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  db:
+    container_name: 'UVEG_DBAdmin_R4_U3_Origen'
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: '12345'
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      # Configuración de puerto
+      - '3306:3306'
+    volumes:
+    - ./sql-data/db:/var/lib/mysql
+    - ./salida:/salida
