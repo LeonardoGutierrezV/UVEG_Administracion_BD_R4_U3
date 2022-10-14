@@ -1,10 +1,10 @@
 ## R4. Respaldo, recuperación y migración de bases de datos.
 
-En el presente repositorio se ejecuta un ejercicio de Creación de base d edatos, Respaldo y reintegración en servidores de base de datos **MySQL** utilizando **Docker** para facilitar el proceso de montaje de servidores.
+En el presente repositorio se ejecuta un ejercicio de Creación de base de datos, Respaldo y reintegración en servidores de base de datos **MySQL** utilizando **Docker** para facilitar el proceso de montaje de servidores.
 
 Se da por sentado que tenemos Docker instalado.
 
-El el repositorio encontramos el archivo **Script_escuela_reto4.sql** que contiene la información inicial de la base de datos que debe ser respaldada.
+El repositorio encontramos el archivo **Script_escuela_reto4.sql** que contiene la información inicial de la base de datos que debe ser respaldada.
 
 ```sql
 CREATE DATABASE Escuela;
@@ -66,7 +66,7 @@ services:
     - ./salida:/salida
 ```
 
-**Destino**: Que contiene el archivo docker-compose.yml para crear el servidor donde reintegraremos la base de datos extraida del servidor origen.
+**Destino**: Que contiene el archivo docker-compose.yml para crear el servidor donde reintegraremos la base de datos extraída del servidor origen.
 
 ```yaml
 version: '3.3'
@@ -85,21 +85,21 @@ services:
     - ./entrada:/entrada
 ```
 
-Se han dispuesto de esta forma para que cada carpeta pueda generar y cotener los dorectorios mapeados de los contenedores.
+Se han dispuesto de esta forma para que cada carpeta pueda generar y contenedor los directorios mapeados de los contenedores.
 
-Presionamos la tecla **windows+R** para lanzar la ventana de ejecucion de comandos, en la cual escribiremos el siguiente comando.
+Presionamos la tecla **windows+R** para lanzar la ventana de ejecución de comandos, en la cual escribiremos el siguiente comando.
 
 ```bash
 cmd /k cd "C:\Users\projects\UVEG_Administracion_BD_R4_U3\origen"
 ```
 
-Para acceder a la carpeta donde tenemos el archivo yml del servidor origen. A continuación debemos lanzar el contenedor origen. En la ventana de CMD que se nos abrio, debemos escribir el siguiente comando.
+Para acceder a la carpeta donde tenemos el archivo yml del servidor origen. A continuación, debemos lanzar el contenedor origen. En la ventana de CMD que se nos abrió, debemos escribir el siguiente comando.
 
 ```bash
 docker-compose up -d
 ```
 Esto generara la creación del contenedor con un servidor de MySQL completamente funcional.
-Aun que el contenedor haya sido creado y nos muestre la leyenda de que ha sido iniciado el contenedor, debemos darle un par de minutos ya que al agregar **-d** a la ejecución del contenedor, la ejecucuón de **MySQl** se realiza en segundo plano por lo cual puede tomar unos minutos mas.
+Aunque el contenedor haya sido creado y nos muestre la leyenda de que ha sido iniciado el contenedor, debemos darle un par de minutos ya que al agregar **-d** a la ejecución del contenedor, la ejecución de **MySQl** se realiza en segundo plano por lo cual puede tomar unos minutos mas.
 
 ```bash 
 [+] Running 2/2
@@ -109,23 +109,23 @@ Aun que el contenedor haya sido creado y nos muestre la leyenda de que ha sido i
 C:\Users\projects\UVEG_Administracion_BD_R4_U3\origen>
 ```
 
-Despues de unos minutos debemos poder trabajar con el servicio de MySQL, y entonces procedemos a cargar la base de datos original, para lo cual si clonaste o descargaste la el repositorio debemos poder continuar sin problema con la siguiente instrucción, la cual se puede escribir en la ventana CMD que se nos abrio desde el inicio de la practica.
+después de unos minutos debemos poder trabajar con el servicio de MySQL, y entonces procedemos a cargar la base de datos original, para lo cual si clonaste o descargaste la el repositorio debemos poder continuar sin problema con la siguiente instrucción, la cual se puede escribir en la ventana CMD que se nos abrió desde el inicio de la práctica.
 
 ```bash
 docker exec -i UVEG_DBAdmin_R4_U3_Origen sh -c "exec mysql -uroot -p12345" < Script_escuela_reto4.sql
 ```
-Con esto integraremos el Script proporcionado al contenedor **Origen**. Al terminar nos lanzara el siguiente mensaje, esto debido a que estamosn escribiendo la clave directamente sobre el comando de integración.
+Con esto integraremos el Script proporcionado al contenedor **Origen**. Al terminar nos lanzara el siguiente mensaje, esto debido a que estamos escribiendo la clave directamente sobre el comando de integración.
 
 ```bash
 mysql: [Warning] Using a password on the command line interface can be insecure.
 ```
 
-Procedemos a ingresar a nuestro contenedor para valida que se a integradao la base de datos, para lo cual ejecutamos el siguiente comando en la misma terminal.
+Procedemos a ingresar a nuestro contenedor para valida que se ha integrada o la base de datos, para lo cual ejecutamos el siguiente comando en la misma terminal.
 
 ```bash
 docker exec -it UVEG_DBAdmin_R4_U3_Origen /bin/bash -l
 ```
-Nos devolvera como resultado la siguiente leyenda:
+Nos devolverá como resultado la siguiente leyenda:
 
 ```bash
 root@7208031e9287:/#
@@ -135,7 +135,7 @@ Lo que indica que ya nos encontramos dentro de nuestro contenedor, ahora debemos
 ```bash
 mysql -u root -p
 ```
-Recordemos que la clave es:**12345**
+Recordemos que la clave es: **12345**
 
 Consultamos las bases de datos montadas:
 
@@ -158,7 +158,7 @@ Ahora procedemos a realizar el respaldo de la base de datos que tenemos montada.
 ```bash
 mysqldump -u root -p Escuela > /salida/Full_Bkp_Escuela-$(date +%F).sql
 ```
-Nos pedira ingresar nuestro pasword, y procedera a ejecutar el respaldo. Acontinuación procedemos a validar que el respaldo se ha creado en la ubicación que le indicamos.
+Nos pedirá ingresar nuestro pasword, y procederá a ejecutar el respaldo. A continuación procedemos a validar que el respaldo se ha creado en la ubicación que le indicamos.
 
 ```bash
 ls salida
@@ -182,7 +182,7 @@ Y ejecutamos el siguiente comando para crear el contenedor destino.
 docker-compose up -d
 ```
 
-Recordemos que apesar de terminar la creación del contenedor al utilizar **-d** la ejecución del servidor MySQL sera en segundo plano por lo que debemos darle unos minutos hasta que termine.
+Recordemos que a pesar de terminar la creación del contenedor al utilizar **-d** la ejecución del servidor MySQL será en segundo plano por lo que debemos darle unos minutos hasta que termine.
 
 Una vez que tengamos las carpetas creadas dentro de la carpeta del contenedor destino debemos copiar el archivo de respaldo de la carpeta **salida** del contenedor **origen** dentro de la carpeta **entrada** del contenedor **destino** para poder tenerla disponible dentro del contenedor. Y procedemos a entrar al contenedor **Destino**
 
@@ -201,7 +201,7 @@ Escribimos exit, y procedemos a integrar el respaldo que se extrajo del servidor
 ```bash
  mysql -u root -p < entrada/Full_Bkp_Escuela-2022-10-14.sql Escuela
 ```
-Nos solicitara ingresar la clave del usuario root. Y una vez que regrese al prompt, podemo validar la reintegración.
+Nos solicitara ingresar la clave del usuario root. Y una vez que regrese al prompt, podemos validar la reintegración.
 
 Una vez integrada la base de datos podemos proceder a crear los usuarios y sus permisos.
 
@@ -220,14 +220,14 @@ Ahora podemosconsultar los privilegios de cada usuario.
 SHOW GRANTS FOR 'consulta';
 mysql> SHOW GRANTS FOR 'administrador_escuela';
 ```
-Para terminar validemos que se creo la estructura de la base de datos;
+Para terminar validemos que se creó la estructura de la base de datos;
 
 ```bash
 USE Escuela;
 SHOW tables;
 ```
 
-Lo que nos devolvera la siguiente información.
+Lo que nos devolverá la siguiente información.
 
 ```bash
 +-------------------+
@@ -239,7 +239,7 @@ Lo que nos devolvera la siguiente información.
 2 rows in set (0.00 sec)
 ```
 
-Para terminar detenemos el contenedor destino.
+Para terminar, detenemos el contenedor destino.
 
 ```bash
 docker stop UVEG_DBAdmin_R4_U3_Destino
@@ -250,6 +250,5 @@ Nos colocamos en la carpeta principal de cada uno de los contenedores y ejecutam
 ```bash
 docker compose down -v
 ```
-Y con esta instrucción estamos deputrando los contenedores en desuso.
-
+Y con esta instrucción estamos depurando los contenedores en desuso.
 ##### dbar4u3
